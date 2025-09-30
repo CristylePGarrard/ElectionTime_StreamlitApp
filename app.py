@@ -20,23 +20,6 @@ from shapely.geometry import Polygon, MultiPolygon
 import pydeck as pdk
 import altair as alt
 
-# st.markdown(
-#     """
-#     <style>
-#     img {
-#         max-width: 100%;
-#         height: auto;
-#     }
-#     @media (max-width: 600px) {
-#         img {
-#             max-width: 400px !important;
-#         }
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True,
-# )
-
 
 # fuzzy matching (rapidfuzz preferred)
 try:
