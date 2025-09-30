@@ -20,22 +20,22 @@ from shapely.geometry import Polygon, MultiPolygon
 import pydeck as pdk
 import altair as alt
 
-st.markdown(
-    """
-    <style>
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-    @media (max-width: 600px) {
-        img {
-            max-width: 200px !important;
-        }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# st.markdown(
+#     """
+#     <style>
+#     img {
+#         max-width: 100%;
+#         height: auto;
+#     }
+#     @media (max-width: 600px) {
+#         img {
+#             max-width: 400px !important;
+#         }
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
 
 
 # fuzzy matching (rapidfuzz preferred)
@@ -286,7 +286,7 @@ bills_with_rep = bills_df.merge(reps_merged.drop(columns="geometry", errors="ign
 # ---------------------
 # Sidebar + search
 # ---------------------
-st.title("ElectionTime — Rep KPI Dashboard")
+st.title("Utah Reps KPI Dashboard - 2025")
 st.markdown("Search a representative, view KPIs, committees, bills, and district map.")
 
 # debug counts
@@ -298,27 +298,31 @@ if len(rep_choices) == 0:
     st.error("No display names were created. Check your geo/KPI name columns.")
     st.stop()
 
-query = st.sidebar.text_input("Search representative (fuzzy)", "")
-if query.strip() == "":
-    selected_rep = st.sidebar.selectbox("Choose representative", options=rep_choices)
-else:
-    raw_matches = fuzzy_extract(query, rep_choices, limit=10)
-    # normalize match tuples (match, score, maybe index)
-    matches = []
-    for m in raw_matches:
-        if isinstance(m, (tuple, list)):
-            if len(m) >= 2:
-                matches.append((m[0], m[1]))
-            elif len(m) == 1:
-                matches.append((m[0], 0))
-        else:
-            matches.append((m, 0))
-    if len(matches) == 0:
-        st.sidebar.warning("No fuzzy matches found; showing full list.")
-        selected_rep = st.sidebar.selectbox("Choose representative", options=rep_choices)
+col_a, col_b = st.columns(2)
+with col_a:
+    query = st.text_input("Search representative (fuzzy)", "")
+
+with col_b:
+    if query.strip() == "":
+        selected_rep = st.selectbox("Choose representative", options=rep_choices)
     else:
-        match_names = [m[0] for m in matches]
-        selected_rep = st.sidebar.selectbox("Top matches", options=match_names)
+        raw_matches = fuzzy_extract(query, rep_choices, limit=10)
+        # normalize match tuples (match, score, maybe index)
+        matches = []
+        for m in raw_matches:
+            if isinstance(m, (tuple, list)):
+                if len(m) >= 2:
+                    matches.append((m[0], m[1]))
+                elif len(m) == 1:
+                    matches.append((m[0], 0))
+            else:
+                matches.append((m, 0))
+        if len(matches) == 0:
+            st.warning("No fuzzy matches found; showing full list.")
+            selected_rep = st.sidebar.selectbox("Choose representative", options=rep_choices)
+        else:
+            match_names = [m[0] for m in matches]
+            selected_rep = st.sidebar.selectbox("Top matches", options=match_names)
 
 if not selected_rep:
     st.info("Pick a representative to continue.")
@@ -402,10 +406,11 @@ with col1:
     # # ------------------------------------------# #
     st.image(row["Img_URL"], use_container_width=True)
 
-    k1, k2, k3 = st.columns(3)
+    c1, k1, k2, k3, c2 = st.columns([0.5,1,1,1,0.5])
     k1.metric("Failed", failed_bills)
     k2.metric("Passed", passed_bills)
     k3.metric("Total bills", total_bills)
+
 
     # horizontal bar chart - normalized
     # status stacked bar (horizontal, normalized to 100%)
