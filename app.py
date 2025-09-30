@@ -2,8 +2,8 @@
 """
 ElectionTime — Representative KPI dashboard (merged datasets)
 
-Place this file at: streamlit_app/app.py
-Data files expected at: streamlit_app/data/
+Place this file at: ElectionTime_StreamlitApp/app.py
+Data files expected at: ElectionTime_StreamlitApp/data/
   - combinedBills_2025.json
   - repKPIs_2025.json
   - reps_with_geo_data_a.geojson
