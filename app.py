@@ -311,6 +311,8 @@ if not selected_rep:
     st.info("Pick a representative to continue.")
     st.stop()
 
+st.link_button("Go to state website to find reps ->", "https://le.utah.gov/GIS/findDistrict.jsp")
+
 # find selected row(s)
 rep_row = reps_merged[reps_merged["display_name"] == selected_rep]
 if rep_row.empty:
@@ -618,14 +620,3 @@ if comm_list:
         st.markdown(f"- **{c}** — {r}")
 else:
     st.info("No committee data available for this representative.")
-# ---------------------
-# Bottom: quick export
-# ---------------------
-# st.markdown("---")
-# st.write(f"- Loaded {len(bills_df)} bills, {len(repkpis_df)} KPI rows, {len(reps_merged)} geo rows.")
-# if st.button("Download currently visible rep's bills as CSV"):
-#     try:
-#         csv = rep_bills.to_csv(index=False)
-#         st.download_button("Download CSV", data=csv, file_name=f"{selected_rep.replace(' ','_')}_bills.csv", mime="text/csv")
-#     except Exception as e:
-#         st.error(f"Could not prepare download: {e
