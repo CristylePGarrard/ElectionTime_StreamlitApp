@@ -220,7 +220,7 @@ else:
         # as last resort, create empty keys (won't match)
         repkpis_df["rep_key"] = ""
 
-# For geo: prefer Bill Sponsor if present (you said you added it), else representative name
+# For geo: prefer Bill Sponsor if present, else representative name
 if repgeo_name_col:
     repsgeo_gdf["rep_key"] = repsgeo_gdf[repgeo_name_col].fillna("").apply(make_rep_key)
 else:
@@ -490,7 +490,11 @@ with col2:
                 get_fill_color=[200, 30, 0, 80],
                 get_line_color=[0, 0, 0],
             )
-            st.pydeck_chart(pdk.Deck(layers=[polygon_layer], initial_view_state=view, tooltip={"text":"{name}"}))
+            st.pydeck_chart(pdk.Deck(layers=[polygon_layer],
+                                     initial_view_state=view,
+                                     tooltip={"text":"{name}"}),
+                            height=300,
+                            use_container_width=True)
         else:
             st.write("_Geometry present but could not convert to polygon for pydeck._")
     else:
